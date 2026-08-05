@@ -1,0 +1,937 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Рейтинг-14 2026 · Солнечногорск · 1 полугодие</title>
+<style>
+:root {
+  --bg:#f6f5f2; --card:#fff; --ink:#1a1a1a; --muted:#6b6b6b;
+  --line:#e8e7e3;
+  --green:#4caf50; --green-bg:#e8f5e9; --green-dark:#2e7d32;
+  --yellow:#f5a623; --yellow-bg:#fff4e0; --yellow-dark:#b26a00;
+  --red:#e53935; --red-bg:#ffebee; --red-dark:#c62828;
+  --gray:#bdbdbd; --gray-bg:#f5f5f5;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+  background:var(--bg);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased;
+}
+.container{max-width:1300px;margin:0 auto;padding:32px 24px 80px}
+
+/* ---- HERO ---- */
+.hero{
+  background:linear-gradient(135deg,#fff 0%,#fafaf5 100%);
+  border:1px solid var(--line);border-radius:16px;
+  padding:28px 32px;margin-bottom:20px;
+  display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;
+  box-shadow:0 1px 3px rgba(0,0,0,.02);
+}
+.hero-title{font-size:26px;font-weight:800;letter-spacing:-0.02em;margin:0}
+.hero-subtitle{color:var(--muted);font-size:14px;margin-top:6px}
+.hero-place{text-align:right}
+.hero-place-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600}
+.hero-place-value{font-size:52px;font-weight:800;color:var(--yellow-dark);line-height:1;margin-top:2px}
+.hero-place-note{font-size:11px;color:var(--muted);margin-top:4px}
+
+/* ---- TABS ---- */
+.tabs{display:flex;gap:2px;border-bottom:2px solid var(--ink);margin:16px 0 28px}
+.tab{
+  padding:14px 24px;cursor:pointer;background:none;border:none;
+  font-size:14px;font-weight:600;color:var(--muted);
+  border-bottom:3px solid transparent;margin-bottom:-2px;
+  font-family:inherit;transition:color .15s;
+}
+.tab:hover{color:var(--ink)}
+.tab.active{color:var(--ink);border-bottom-color:var(--ink)}
+.panel{display:none;animation:fadeIn .2s ease}
+.panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+h2{font-size:19px;margin:32px 0 16px;font-weight:700;letter-spacing:-0.01em}
+h2:first-child{margin-top:0}
+.subtitle{color:var(--muted);margin:-8px 0 16px;font-size:13px}
+
+/* ---- STATS ---- */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:8px}
+@media(max-width:840px){.stats-grid{grid-template-columns:1fr}}
+.stat-card{
+  background:var(--card);border:1px solid var(--line);border-radius:14px;
+  padding:22px 26px;box-shadow:0 1px 2px rgba(0,0,0,.02);
+}
+.stat-card h3{
+  margin:0 0 16px;font-size:11px;font-weight:700;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.08em;
+}
+.stat-row{display:grid;grid-template-columns:auto 1fr;gap:26px;align-items:center}
+.donut-wrap{position:relative;width:170px;height:170px;flex-shrink:0}
+.donut-center{position:absolute;inset:0;display:flex;flex-direction:column;
+  justify-content:center;align-items:center;pointer-events:none}
+.donut-center-value{font-size:30px;font-weight:800;line-height:1;letter-spacing:-0.02em}
+.donut-center-label{font-size:10px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.08em;margin-top:5px;font-weight:600}
+
+.lgnd{display:flex;flex-direction:column;gap:10px}
+.lgnd-row{
+  display:grid;grid-template-columns:14px 1fr auto auto;gap:10px;
+  align-items:center;font-size:13px;
+}
+.lgnd-dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.lgnd-label{color:var(--ink)}
+.lgnd-val{font-variant-numeric:tabular-nums;font-weight:700;text-align:right}
+.lgnd-pct{color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums;
+  text-align:right;min-width:44px}
+
+/* ---- INDICATOR MAP ---- */
+h2.map-title{margin-top:36px}
+.ind-block{
+  background:var(--card);border:1px solid var(--line);border-radius:10px;
+  margin-bottom:8px;overflow:hidden;transition:box-shadow .15s;
+}
+.ind-block:hover{box-shadow:0 2px 6px rgba(0,0,0,.04)}
+.ind-block[open]{box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.ind-block>summary{
+  padding:14px 20px 14px 44px;font-weight:600;cursor:pointer;list-style:none;
+  position:relative;display:grid;
+  grid-template-columns:32px 1fr 96px 56px 168px;
+  gap:16px;align-items:center;
+}
+.ind-block>summary::-webkit-details-marker{display:none}
+.ind-block>summary::before{
+  content:"";position:absolute;left:20px;top:50%;transform:translateY(-50%);
+  width:0;height:0;border-left:6px solid var(--muted);border-top:4px solid transparent;
+  border-bottom:4px solid transparent;transition:transform .15s;
+}
+.ind-block[open]>summary::before{transform:translateY(-50%) rotate(90deg)}
+.ind-num{font-size:16px;font-weight:800;text-align:center}
+.ind-name{font-size:15px;font-weight:600;line-height:1.3}
+.ind-place{display:inline-flex;align-items:baseline;justify-content:flex-end;gap:6px;white-space:nowrap}
+.place-lbl{font-size:12px;color:var(--muted);font-weight:500;text-transform:lowercase;letter-spacing:.02em}
+.place-num{font-size:14px;color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums;min-width:24px;text-align:right;display:inline-block}
+.ind-weight{
+  font-size:12px;font-weight:700;background:#f0efea;color:var(--ink);
+  padding:4px 10px;border-radius:11px;text-align:center;
+}
+.ind-zone-badge{
+  font-size:10px;font-weight:700;padding:5px 10px;border-radius:11px;
+  text-transform:uppercase;letter-spacing:.05em;text-align:center;
+}
+.zone-badge-green{background:var(--green-bg);color:var(--green-dark)}
+.zone-badge-yellow{background:var(--yellow-bg);color:var(--yellow-dark)}
+.zone-badge-red{background:var(--red-bg);color:var(--red-dark)}
+.zone-badge-not_rated{background:var(--gray-bg);color:#555}
+.zone-header-green{border-left:6px solid var(--green)}
+.zone-header-yellow{border-left:6px solid var(--yellow)}
+.zone-header-red{border-left:6px solid var(--red)}
+.zone-header-not_rated{border-left:6px solid var(--gray)}
+
+.no-leaves{padding:14px 20px;color:var(--muted);font-style:italic;font-size:13px;
+  border-top:1px solid var(--line)}
+
+/* ---- TABLES ---- */
+table.leaf-table{width:100%;border-collapse:collapse;font-size:13px;
+  border-top:1px solid var(--line)}
+table.leaf-table th,table.leaf-table td{padding:9px 16px;text-align:left;
+  border-bottom:1px solid var(--line)}
+table.leaf-table th{background:#faf9f5;font-weight:700;font-size:10px;
+  text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+table.leaf-table tr:last-child td{border-bottom:none}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.mono{font-family:"SF Mono",Menlo,Consolas,monospace;font-size:12px;color:var(--muted)}
+.row-green{background:var(--green-bg)}
+.row-yellow{background:var(--yellow-bg)}
+.row-red{background:var(--red-bg)}
+.row-not_rated{background:var(--gray-bg)}
+.zone-cell{font-weight:600;font-size:12px}
+.zone-green{color:var(--green-dark)}
+.zone-yellow{color:var(--yellow-dark)}
+.zone-red{color:var(--red-dark)}
+.zone-not_rated{color:#666;font-style:italic}
+
+/* ---- DEPUTY DETAIL ---- */
+.deputy-detail{
+  background:var(--card);border:1px solid var(--line);border-radius:10px;
+  margin-bottom:8px;overflow:hidden;
+}
+.deputy-detail>summary{
+  padding:14px 20px 14px 44px;font-weight:600;cursor:pointer;list-style:none;
+  position:relative;font-size:15px;
+}
+.deputy-detail>summary::-webkit-details-marker{display:none}
+.deputy-detail>summary::before{
+  content:"";position:absolute;left:20px;top:50%;transform:translateY(-50%);
+  width:0;height:0;border-left:6px solid var(--muted);border-top:4px solid transparent;
+  border-bottom:4px solid transparent;transition:transform .15s;
+}
+.deputy-detail[open]>summary::before{transform:translateY(-50%) rotate(90deg)}
+.dep-role-inline{font-weight:400;color:var(--muted);font-size:13px}
+
+/* ---- DEPUTY CARDS ---- */
+.dep-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-top:14px}
+.dep-card{
+  background:var(--card);border:1px solid var(--line);border-radius:14px;
+  padding:20px 22px;position:relative;overflow:hidden;
+  box-shadow:0 1px 3px rgba(0,0,0,.03);
+  border-left:5px solid var(--gray);
+}
+.card-accent-green{border-left-color:var(--green)}
+.card-accent-yellow{border-left-color:var(--yellow)}
+.card-accent-red{border-left-color:var(--red)}
+
+.dep-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
+.dep-name{font-weight:700;font-size:16px;line-height:1.2}
+.dep-role{font-size:12px;color:var(--muted);margin-top:2px}
+.dep-symbol{font-size:20px;line-height:1;padding-top:2px}
+
+.dep-metrics{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.dep-metric{}
+.dep-metric-value{font-size:24px;font-weight:800;line-height:1;letter-spacing:-0.02em;font-variant-numeric:tabular-nums}
+.dep-metric-label{font-size:10px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.08em;font-weight:600;margin-top:5px}
+
+.dep-zonebar{
+  display:flex;height:6px;border-radius:3px;overflow:hidden;
+  background:#eee;margin-bottom:8px;
+}
+.zbar-seg{height:100%}
+.zbar-green{background:var(--green)}
+.zbar-yellow{background:var(--yellow)}
+.zbar-red{background:var(--red)}
+
+.dep-zonelabels{
+  display:flex;justify-content:space-between;gap:6px;font-size:11px;color:var(--muted);
+  margin-bottom:10px;
+}
+.dep-zonelabels span{display:inline-flex;align-items:center;gap:5px}
+
+.dep-status{
+  font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
+  color:var(--muted);
+}
+.card-accent-green .dep-status{color:var(--green-dark)}
+.card-accent-yellow .dep-status{color:var(--yellow-dark)}
+.card-accent-red .dep-status{color:var(--red-dark)}
+
+/* ---- METHOD ---- */
+.method{background:var(--card);border:1px solid var(--line);border-radius:12px;
+  padding:18px 24px;margin-top:24px}
+.method h3{margin:0 0 10px;color:var(--ink);font-size:14px;font-weight:700}
+.method p,.method ul{font-size:13px;color:var(--muted);margin:6px 0}
+.method ul{padding-left:20px}
+.method li{margin:3px 0}
+.formula{background:#f5f4ef;padding:10px 14px;border-radius:8px;
+  font-family:"SF Mono",Menlo,Consolas,monospace;font-size:12px;color:var(--ink);margin:8px 0}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="hero">
+    <div>
+      <div class="hero-title">Мотивационная модель заместителей главы</div>
+      <div class="hero-subtitle">Рейтинг-14 2026 · Солнечногорск · 1 полугодие 2026</div>
+    </div>
+    <div class="hero-place">
+      <div class="hero-place-label">Итоговое место</div>
+      <div class="hero-place-value">28</div>
+      <div class="hero-place-note">предварительно</div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="overview">Общие данные</button>
+    <button class="tab" data-tab="deputies">Карта ответственности</button>
+  </div>
+
+  <!-- ====== TAB 1 ====== -->
+  <div class="panel active" id="overview">
+
+    <h2>Верхнеуровневые показатели (14 штук)</h2>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h3>По количеству</h3>
+        <div class="stat-row">
+          <div class="donut-wrap">
+            <svg width="170" height="170" viewBox="0 0 170 170"><circle cx="85.0" cy="85.0" r="69.0" fill="none" stroke="#4caf50" stroke-width="32" stroke-dasharray="121.869 433.540" stroke-dashoffset="0.000" transform="rotate(-90 85.0 85.0)" stroke-linecap="butt"/><circle cx="85.0" cy="85.0" r="69.0" fill="none" stroke="#ffb300" stroke-width="32" stroke-dasharray="152.836 433.540" stroke-dashoffset="-123.869" transform="rotate(-90 85.0 85.0)" stroke-linecap="butt"/><circle cx="85.0" cy="85.0" r="69.0" fill="none" stroke="#e53935" stroke-width="32" stroke-dasharray="90.901 433.540" stroke-dashoffset="-278.704" transform="rotate(-90 85.0 85.0)" stroke-linecap="butt"/><circle cx="85.0" cy="85.0" r="69.0" fill="none" stroke="#bdbdbd" stroke-width="32" stroke-dasharray="59.934 433.540" stroke-dashoffset="-371.606" transform="rotate(-90 85.0 85.0)" stroke-linecap="butt"/></svg>
+            <div class="donut-center">
+              <div class="donut-center-value">14</div>
+              <div class="donut-center-label">всего</div>
+            </div>
+          </div>
+          <div class="lgnd"><div class="lgnd-row"><span class="lgnd-dot" style="background:#4caf50"></span><span class="lgnd-label">Зелёная</span><span class="lgnd-val">4</span><span class="lgnd-pct">28.6%</span></div><div class="lgnd-row"><span class="lgnd-dot" style="background:#ffb300"></span><span class="lgnd-label">Жёлтая</span><span class="lgnd-val">5</span><span class="lgnd-pct">35.7%</span></div><div class="lgnd-row"><span class="lgnd-dot" style="background:#e53935"></span><span class="lgnd-label">Красная</span><span class="lgnd-val">3</span><span class="lgnd-pct">21.4%</span></div><div class="lgnd-row"><span class="lgnd-dot" style="background:#bdbdbd"></span><span class="lgnd-label">Не рейтингуется</span><span class="lgnd-val">2</span><span class="lgnd-pct">14.3%</span></div></div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <h3>По весу в рейтинге</h3>
+        <div class="stat-row">
+          <div class="donut-wrap">
+            <svg width="170" height="170" viewBox="0 0 170 170"><circle cx="85.0" cy="85.0" r="69.0" fill="none" stroke="#4caf50" stroke-width="32" stroke-dasharray="119.391 433.540" stroke-dashoffset="0.000" transform="rotate(-90 85.0 85.0)" stroke-linecap="butt"/><circle cx="85.0" cy="85.0" r="69.0" fill="none" stroke="#ffb300" stroke-width="32" stroke-dasharray="141.068 433.540" stroke-dashoffset="-121.391" transform="rotate(-90 85.0 85.0)" stroke-linecap="butt"/><circle cx="85.0" cy="85.0" r="69.0" fill="none" stroke="#e53935" stroke-width="32" stroke-dasharray="106.385 433.540" stroke-dashoffset="-264.459" transform="rotate(-90 85.0 85.0)" stroke-linecap="butt"/><circle cx="85.0" cy="85.0" r="69.0" fill="none" stroke="#bdbdbd" stroke-width="32" stroke-dasharray="58.696 433.540" stroke-dashoffset="-372.844" transform="rotate(-90 85.0 85.0)" stroke-linecap="butt"/></svg>
+            <div class="donut-center">
+              <div class="donut-center-value">100%</div>
+              <div class="donut-center-label">рейтинга</div>
+            </div>
+          </div>
+          <div class="lgnd"><div class="lgnd-row"><span class="lgnd-dot" style="background:#4caf50"></span><span class="lgnd-label">Зелёная</span><span class="lgnd-val">28.00%</span><span class="lgnd-pct">28.0%</span></div><div class="lgnd-row"><span class="lgnd-dot" style="background:#ffb300"></span><span class="lgnd-label">Жёлтая</span><span class="lgnd-val">33.00%</span><span class="lgnd-pct">33.0%</span></div><div class="lgnd-row"><span class="lgnd-dot" style="background:#e53935"></span><span class="lgnd-label">Красная</span><span class="lgnd-val">25.00%</span><span class="lgnd-pct">25.0%</span></div><div class="lgnd-row"><span class="lgnd-dot" style="background:#bdbdbd"></span><span class="lgnd-label">Не рейтингуется</span><span class="lgnd-val">14.00%</span><span class="lgnd-pct">14.0%</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <h2>Листовые подпоказатели (63 штук)</h2>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h3>По количеству</h3>
+        <div class="stat-row">
+          <div class="donut-wrap">
+            <svg width="170" height="170" viewBox="0 0 170 170"><circle cx="85.0" cy="85.0" r="69.0" fill="none" stroke="#4caf50" stroke-width="32" stroke-dasharray="231.974 433.540" stroke-dashoffset="0.000" transform="rotate(-90 85.0 85.0)" stroke-linecap="butt"/><circle cx="85.0" cy="85.0" r="69.0" fill="none" stroke="#ffb300" stroke-width="32" stroke-dasharray="73.697 433.540" stroke-dashoffset="-233.974" transform="rotate(-90 85.0 85.0)" stroke-linecap="butt"/><circle cx="85.0" cy="85.0" r="69.0" fill="none" stroke="#e53935" stroke-width="32" stroke-dasharray="94.342 433.540" stroke-dashoffset="-309.671" transform="rotate(-90 85.0 85.0)" stroke-linecap="butt"/><circle cx="85.0" cy="85.0" r="69.0" fill="none" stroke="#bdbdbd" stroke-width="32" stroke-dasharray="25.526 433.540" stroke-dashoffset="-406.013" transform="rotate(-90 85.0 85.0)" stroke-linecap="butt"/></svg>
+            <div class="donut-center">
+              <div class="donut-center-value">63</div>
+              <div class="donut-center-label">всего</div>
+            </div>
+          </div>
+          <div class="lgnd"><div class="lgnd-row"><span class="lgnd-dot" style="background:#4caf50"></span><span class="lgnd-label">Зелёная</span><span class="lgnd-val">34</span><span class="lgnd-pct">54.0%</span></div><div class="lgnd-row"><span class="lgnd-dot" style="background:#ffb300"></span><span class="lgnd-label">Жёлтая</span><span class="lgnd-val">11</span><span class="lgnd-pct">17.5%</span></div><div class="lgnd-row"><span class="lgnd-dot" style="background:#e53935"></span><span class="lgnd-label">Красная</span><span class="lgnd-val">14</span><span class="lgnd-pct">22.2%</span></div><div class="lgnd-row"><span class="lgnd-dot" style="background:#bdbdbd"></span><span class="lgnd-label">Не рейтингуется</span><span class="lgnd-val">4</span><span class="lgnd-pct">6.3%</span></div></div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <h3>По весу в рейтинге</h3>
+        <div class="stat-row">
+          <div class="donut-wrap">
+            <svg width="170" height="170" viewBox="0 0 170 170"><circle cx="85.0" cy="85.0" r="69.0" fill="none" stroke="#4caf50" stroke-width="32" stroke-dasharray="193.098 433.540" stroke-dashoffset="0.000" transform="rotate(-90 85.0 85.0)" stroke-linecap="butt"/><circle cx="85.0" cy="85.0" r="69.0" fill="none" stroke="#ffb300" stroke-width="32" stroke-dasharray="78.213 433.540" stroke-dashoffset="-195.098" transform="rotate(-90 85.0 85.0)" stroke-linecap="butt"/><circle cx="85.0" cy="85.0" r="69.0" fill="none" stroke="#e53935" stroke-width="32" stroke-dasharray="95.571 433.540" stroke-dashoffset="-275.311" transform="rotate(-90 85.0 85.0)" stroke-linecap="butt"/><circle cx="85.0" cy="85.0" r="69.0" fill="none" stroke="#bdbdbd" stroke-width="32" stroke-dasharray="58.658 433.540" stroke-dashoffset="-372.882" transform="rotate(-90 85.0 85.0)" stroke-linecap="butt"/></svg>
+            <div class="donut-center">
+              <div class="donut-center-value">100%</div>
+              <div class="donut-center-label">рейтинга</div>
+            </div>
+          </div>
+          <div class="lgnd"><div class="lgnd-row"><span class="lgnd-dot" style="background:#4caf50"></span><span class="lgnd-label">Зелёная</span><span class="lgnd-val">45.00%</span><span class="lgnd-pct">45.0%</span></div><div class="lgnd-row"><span class="lgnd-dot" style="background:#ffb300"></span><span class="lgnd-label">Жёлтая</span><span class="lgnd-val">18.50%</span><span class="lgnd-pct">18.5%</span></div><div class="lgnd-row"><span class="lgnd-dot" style="background:#e53935"></span><span class="lgnd-label">Красная</span><span class="lgnd-val">22.50%</span><span class="lgnd-pct">22.5%</span></div><div class="lgnd-row"><span class="lgnd-dot" style="background:#bdbdbd"></span><span class="lgnd-label">Не рейтингуется</span><span class="lgnd-val">13.99%</span><span class="lgnd-pct">14.0%</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="map-title">Карта показателей</h2>
+    <p class="subtitle">Кликните заголовок — раскроется таблица подпоказателей с местом и зоной каждого.</p>
+    
+    <details class="ind-block">
+      <summary class="top-header zone-header-green">
+        <span class="ind-num">1</span>
+        <span class="ind-name">Уровень доверия населения органам власти</span>
+        <span class="ind-place"><span class="place-lbl">место</span><span class="place-num">1</span></span>
+        <span class="ind-weight">15%</span>
+        <span class="ind-zone-badge zone-badge-green">Зелёная</span>
+      </summary>
+      
+        <table class="leaf-table">
+          <thead><tr><th>Код</th><th>Наименование</th><th>Вес</th><th>Место</th><th>Зона</th><th>Ответственный</th></tr></thead>
+          <tbody><tr class="row-yellow"><td class="mono">1.1.1</td><td>Доверие В.В. Путину</td><td class="num">—</td><td class="num"><b>22</b></td><td class="zone-cell zone-yellow">Жёлтая</td><td>Э.А. Машковцев</td></tr><tr class="row-yellow"><td class="mono">1.1.2</td><td>Доверие А.Ю. Воробьёву</td><td class="num">—</td><td class="num"><b>40</b></td><td class="zone-cell zone-yellow">Жёлтая</td><td>Э.А. Машковцев</td></tr><tr class="row-green"><td class="mono">1.2.1</td><td>Здравоохранение (баланс оценок)</td><td class="num">—</td><td class="num"><b>13</b></td><td class="zone-cell zone-green">Зелёная</td><td>И.В. Тишина</td></tr><tr class="row-yellow"><td class="mono">1.2.2</td><td>Образование (баланс оценок)</td><td class="num">—</td><td class="num"><b>29</b></td><td class="zone-cell zone-yellow">Жёлтая</td><td>И.В. Тишина</td></tr><tr class="row-red"><td class="mono">1.2.3</td><td>Экология (баланс оценок)</td><td class="num">—</td><td class="num"><b>44</b></td><td class="zone-cell zone-red">Красная</td><td>Н.С. Иванов</td></tr><tr class="row-green"><td class="mono">1.2.4</td><td>ЖКХ (баланс оценок)</td><td class="num">—</td><td class="num"><b>18</b></td><td class="zone-cell zone-green">Зелёная</td><td>Н.С. Иванов</td></tr><tr class="row-yellow"><td class="mono">1.2.5</td><td>Транспорт (баланс оценок)</td><td class="num">—</td><td class="num"><b>34</b></td><td class="zone-cell zone-yellow">Жёлтая</td><td>В.В. Тушинов</td></tr><tr class="row-red"><td class="mono">1.2.6</td><td>Качество дорог (баланс оценок)</td><td class="num">—</td><td class="num"><b>43</b></td><td class="zone-cell zone-red">Красная</td><td>В.В. Тушинов</td></tr><tr class="row-red"><td class="mono">1.2.7</td><td>Благоустройство (баланс оценок)</td><td class="num">—</td><td class="num"><b>49</b></td><td class="zone-cell zone-red">Красная</td><td>В.В. Тушинов</td></tr><tr class="row-yellow"><td class="mono">1.2.8</td><td>Госуслуги/клиентоцентр. (баланс)</td><td class="num">—</td><td class="num"><b>27</b></td><td class="zone-cell zone-yellow">Жёлтая</td><td>Все заместители</td></tr><tr class="row-green"><td class="mono">1.2.9</td><td>Адаптация СВО (баланс)</td><td class="num">—</td><td class="num"><b>18</b></td><td class="zone-cell zone-green">Зелёная</td><td>Все заместители</td></tr><tr class="row-green"><td class="mono">1.2.10</td><td>Электоральная активность</td><td class="num">—</td><td class="num"><b>9</b></td><td class="zone-cell zone-green">Зелёная</td><td>Все заместители</td></tr></tbody>
+        </table>
+    </details>
+    
+
+    <details class="ind-block">
+      <summary class="top-header zone-header-green">
+        <span class="ind-num">2</span>
+        <span class="ind-name">Реализация государственных задач</span>
+        <span class="ind-place"><span class="place-lbl">место</span><span class="place-num">1</span></span>
+        <span class="ind-weight">4%</span>
+        <span class="ind-zone-badge zone-badge-green">Зелёная</span>
+      </summary>
+      
+        <table class="leaf-table">
+          <thead><tr><th>Код</th><th>Наименование</th><th>Вес</th><th>Место</th><th>Зона</th><th>Ответственный</th></tr></thead>
+          <tbody><tr class="row-green"><td class="mono">2</td><td>Реализация государственных задач</td><td class="num">4.00%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td><td>М.С. Барков</td></tr></tbody>
+        </table>
+    </details>
+    
+
+    <details class="ind-block">
+      <summary class="top-header zone-header-yellow">
+        <span class="ind-num">3</span>
+        <span class="ind-name">Коммуникация и политика</span>
+        <span class="ind-place"><span class="place-lbl">место</span><span class="place-num">20</span></span>
+        <span class="ind-weight">6%</span>
+        <span class="ind-zone-badge zone-badge-yellow">Жёлтая</span>
+      </summary>
+      
+        <table class="leaf-table">
+          <thead><tr><th>Код</th><th>Наименование</th><th>Вес</th><th>Место</th><th>Зона</th><th>Ответственный</th></tr></thead>
+          <tbody><tr class="row-green"><td class="mono">3.1</td><td>Инфоугрозы</td><td class="num">2.00%</td><td class="num"><b>7</b></td><td class="zone-cell zone-green">Зелёная</td><td>Э.А. Машковцев</td></tr><tr class="row-green"><td class="mono">3.2</td><td>Выездные администрации</td><td class="num">1.00%</td><td class="num"><b>19</b></td><td class="zone-cell zone-green">Зелёная</td><td>Э.А. Машковцев</td></tr><tr class="row-red"><td class="mono">3.3.1</td><td>Безопасный регион: видеонаблюдение</td><td class="num">0.75%</td><td class="num"><b>50</b></td><td class="zone-cell zone-red">Красная</td><td>М.С. Барков</td></tr><tr class="row-red"><td class="mono">3.3.2</td><td>Безопасный регион: нарушения по камерам</td><td class="num">0.25%</td><td class="num"><b>48</b></td><td class="zone-cell zone-red">Красная</td><td>М.С. Барков</td></tr><tr class="row-yellow"><td class="mono">3.4</td><td>Единый стандарт зон воинских захоронений</td><td class="num">1.00%</td><td class="num"><b>22</b></td><td class="zone-cell zone-yellow">Жёлтая</td><td>К.О. Типографщик</td></tr><tr class="row-green"><td class="mono">3.5</td><td>Школьная лига</td><td class="num">1.00%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td><td>И.В. Тишина</td></tr></tbody>
+        </table>
+    </details>
+    
+
+    <details class="ind-block">
+      <summary class="top-header zone-header-red">
+        <span class="ind-num">4</span>
+        <span class="ind-name">Мои Дом и Двор</span>
+        <span class="ind-place"><span class="place-lbl">место</span><span class="place-num">44</span></span>
+        <span class="ind-weight">10%</span>
+        <span class="ind-zone-badge zone-badge-red">Красная</span>
+      </summary>
+      
+        <table class="leaf-table">
+          <thead><tr><th>Код</th><th>Наименование</th><th>Вес</th><th>Место</th><th>Зона</th><th>Ответственный</th></tr></thead>
+          <tbody><tr class="row-green"><td class="mono">4.1.1</td><td>СКПДИ, чат-бот ТКО/ДИП</td><td class="num">0.43%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td><td>В.В. Тушинов</td></tr><tr class="row-green"><td class="mono">4.1.2</td><td>Дворники МБУ в Яндекс.Вектор</td><td class="num">0.43%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td><td>В.В. Тушинов</td></tr><tr class="row-green"><td class="mono">4.1.3</td><td>Бюджет на содержание территорий</td><td class="num">0.43%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td><td>В.В. Тушинов</td></tr><tr class="row-green"><td class="mono">4.1.4</td><td>1С:Фреш</td><td class="num">0.43%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td><td>В.В. Тушинов</td></tr><tr class="row-green"><td class="mono">4.1.5</td><td>Контрактная служба МБУ</td><td class="num">0.43%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td><td>В.В. Тушинов</td></tr><tr class="row-green"><td class="mono">4.1.6</td><td>Обеспеченность МБУ кадрами</td><td class="num">0.43%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td><td>В.В. Тушинов</td></tr><tr class="row-green"><td class="mono">4.1.7</td><td>Качество работы ОМСУ в чат-боте ТКО</td><td class="num">0.43%</td><td class="num"><b>12</b></td><td class="zone-cell zone-green">Зелёная</td><td>В.В. Тушинов, Н.С. Иванов</td></tr><tr class="row-red"><td class="mono">4.2</td><td>Собираемость начислений ЖКУ</td><td class="num">2.00%</td><td class="num"><b>44</b></td><td class="zone-cell zone-red">Красная</td><td>Н.С. Иванов</td></tr><tr class="row-yellow"><td class="mono">4.3</td><td>Оснащение МКД ОДПУ</td><td class="num">2.00%</td><td class="num"><b>36</b></td><td class="zone-cell zone-yellow">Жёлтая</td><td>Н.С. Иванов</td></tr><tr class="row-red"><td class="mono">4.4</td><td>Работа с сообщениями в ЕДС</td><td class="num">2.00%</td><td class="num"><b>49</b></td><td class="zone-cell zone-red">Красная</td><td>Н.С. Иванов</td></tr><tr class="row-red"><td class="mono">4.5</td><td>Доступ для ТО газового оборудования</td><td class="num">1.00%</td><td class="num"><b>43</b></td><td class="zone-cell zone-red">Красная</td><td>Н.С. Иванов</td></tr></tbody>
+        </table>
+    </details>
+    
+
+    <details class="ind-block">
+      <summary class="top-header zone-header-not_rated">
+        <span class="ind-num">5</span>
+        <span class="ind-name">Повышение эффективности РСО. ФХД</span>
+        <span class="ind-place"><span class="place-lbl">место</span><span class="place-num">—</span></span>
+        <span class="ind-weight">10%</span>
+        <span class="ind-zone-badge zone-badge-not_rated">Не рейтингуется</span>
+      </summary>
+      
+        <table class="leaf-table">
+          <thead><tr><th>Код</th><th>Наименование</th><th>Вес</th><th>Место</th><th>Зона</th><th>Ответственный</th></tr></thead>
+          <tbody><tr class="row-not_rated"><td class="mono">5</td><td>Повышение эффективности РСО. ФХД</td><td class="num">10.00%</td><td class="num">—</td><td class="zone-cell zone-not_rated">Не рейтингуется</td><td>Н.С. Иванов</td></tr></tbody>
+        </table>
+    </details>
+    
+
+    <details class="ind-block">
+      <summary class="top-header zone-header-yellow">
+        <span class="ind-num">6</span>
+        <span class="ind-name">Модернизация ЖКХ</span>
+        <span class="ind-place"><span class="place-lbl">место</span><span class="place-num">37</span></span>
+        <span class="ind-weight">7%</span>
+        <span class="ind-zone-badge zone-badge-yellow">Жёлтая</span>
+      </summary>
+      
+        <table class="leaf-table">
+          <thead><tr><th>Код</th><th>Наименование</th><th>Вес</th><th>Место</th><th>Зона</th><th>Ответственный</th></tr></thead>
+          <tbody><tr class="row-red"><td class="mono">6.1</td><td>Модернизация ЖКХ (инвест/госпрограмма)</td><td class="num">2.33%</td><td class="num"><b>39</b></td><td class="zone-cell zone-red">Красная</td><td>Н.С. Иванов</td></tr><tr class="row-green"><td class="mono">6.2</td><td>Паспорт готовности к отоп. периоду</td><td class="num">2.33%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td><td>Н.С. Иванов</td></tr><tr class="row-green"><td class="mono">6.3</td><td>Цифровая диспетчеризация 2.0</td><td class="num">2.33%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td><td>Н.С. Иванов</td></tr></tbody>
+        </table>
+    </details>
+    
+
+    <details class="ind-block">
+      <summary class="top-header zone-header-green">
+        <span class="ind-num">7</span>
+        <span class="ind-name">Расселение и снос аварийных домов</span>
+        <span class="ind-place"><span class="place-lbl">место</span><span class="place-num">1</span></span>
+        <span class="ind-weight">5%</span>
+        <span class="ind-zone-badge zone-badge-green">Зелёная</span>
+      </summary>
+      
+        <table class="leaf-table">
+          <thead><tr><th>Код</th><th>Наименование</th><th>Вес</th><th>Место</th><th>Зона</th><th>Ответственный</th></tr></thead>
+          <tbody><tr class="row-green"><td class="mono">7.1</td><td>Расселение частично расселённых МКД</td><td class="num">1.25%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td><td>О.А. Мошарова</td></tr><tr class="row-green"><td class="mono">7.2</td><td>Снос расселённого жилья</td><td class="num">1.25%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td><td>В.В. Тушинов</td></tr><tr class="row-green"><td class="mono">7.3</td><td>Вовлечение высвободившихся ЗУ</td><td class="num">1.25%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td><td>О.А. Мошарова</td></tr><tr class="row-green"><td class="mono">7.4</td><td>Перевод МКД в блокир. застройку</td><td class="num">1.25%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td><td>О.А. Мошарова</td></tr></tbody>
+        </table>
+    </details>
+    
+
+    <details class="ind-block">
+      <summary class="top-header zone-header-yellow">
+        <span class="ind-num">8</span>
+        <span class="ind-name">Хорошие дороги</span>
+        <span class="ind-place"><span class="place-lbl">место</span><span class="place-num">41</span></span>
+        <span class="ind-weight">5%</span>
+        <span class="ind-zone-badge zone-badge-yellow">Жёлтая</span>
+      </summary>
+      
+        <table class="leaf-table">
+          <thead><tr><th>Код</th><th>Наименование</th><th>Вес</th><th>Место</th><th>Зона</th><th>Ответственный</th></tr></thead>
+          <tbody><tr class="row-green"><td class="mono">8.1</td><td>Единое платное парковочное пространство</td><td class="num">1.00%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td><td>В.В. Тушинов</td></tr><tr class="row-red"><td class="mono">8.2</td><td>Снижение смертности на дорогах/ж/д</td><td class="num">4.00%</td><td class="num"><b>46</b></td><td class="zone-cell zone-red">Красная</td><td>В.В. Тушинов</td></tr></tbody>
+        </table>
+    </details>
+    
+
+    <details class="ind-block">
+      <summary class="top-header zone-header-yellow">
+        <span class="ind-num">9</span>
+        <span class="ind-name">Приведение в соответствие объектов НТО</span>
+        <span class="ind-place"><span class="place-lbl">место</span><span class="place-num">16</span></span>
+        <span class="ind-weight">5%</span>
+        <span class="ind-zone-badge zone-badge-yellow">Жёлтая</span>
+      </summary>
+      
+        <table class="leaf-table">
+          <thead><tr><th>Код</th><th>Наименование</th><th>Вес</th><th>Место</th><th>Зона</th><th>Ответственный</th></tr></thead>
+          <tbody><tr class="row-red"><td class="mono">9.1</td><td>Ремонт капитальных объектов потребрынка</td><td class="num">1.50%</td><td class="num"><b>45</b></td><td class="zone-cell zone-red">Красная</td><td>К.О. Типографщик</td></tr><tr class="row-green"><td class="mono">9.2</td><td>Демонтаж НТО</td><td class="num">3.50%</td><td class="num"><b>9</b></td><td class="zone-cell zone-green">Зелёная</td><td>К.О. Типографщик</td></tr></tbody>
+        </table>
+    </details>
+    
+
+    <details class="ind-block">
+      <summary class="top-header zone-header-not_rated">
+        <span class="ind-num">10</span>
+        <span class="ind-name">Эффективная школа</span>
+        <span class="ind-place"><span class="place-lbl">место</span><span class="place-num">—</span></span>
+        <span class="ind-weight">4%</span>
+        <span class="ind-zone-badge zone-badge-not_rated">Не рейтингуется до 3-4 квартала</span>
+      </summary>
+      
+        <table class="leaf-table">
+          <thead><tr><th>Код</th><th>Наименование</th><th>Вес</th><th>Место</th><th>Зона</th><th>Ответственный</th></tr></thead>
+          <tbody><tr class="row-not_rated"><td class="mono">10.1</td><td>Рейтинг школ</td><td class="num">1.33%</td><td class="num">—</td><td class="zone-cell zone-not_rated">Не рейтингуется до 3 квартала</td><td>И.В. Тишина</td></tr><tr class="row-not_rated"><td class="mono">10.2</td><td>Загрузка зданий</td><td class="num">1.33%</td><td class="num">—</td><td class="zone-cell zone-not_rated">Не рейтингуется до 3 квартала</td><td>И.В. Тишина</td></tr><tr class="row-not_rated"><td class="mono">10.3</td><td>Нагрузка на педагогов</td><td class="num">1.33%</td><td class="num">—</td><td class="zone-cell zone-not_rated">Не рейтингуется до 4 квартала</td><td>И.В. Тишина</td></tr></tbody>
+        </table>
+    </details>
+    
+
+    <details class="ind-block">
+      <summary class="top-header zone-header-green">
+        <span class="ind-num">11</span>
+        <span class="ind-name">Умный ДК, ФОК</span>
+        <span class="ind-place"><span class="place-lbl">место</span><span class="place-num">1</span></span>
+        <span class="ind-weight">4%</span>
+        <span class="ind-zone-badge zone-badge-green">Зелёная</span>
+      </summary>
+      
+        <table class="leaf-table">
+          <thead><tr><th>Код</th><th>Наименование</th><th>Вес</th><th>Место</th><th>Зона</th><th>Ответственный</th></tr></thead>
+          <tbody><tr class="row-green"><td class="mono">11.1</td><td>Умный ДК</td><td class="num">2.00%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td><td>И.В. Тишина</td></tr><tr class="row-green"><td class="mono">11.2</td><td>Умный ФОК</td><td class="num">2.00%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td><td>И.В. Тишина</td></tr></tbody>
+        </table>
+    </details>
+    
+
+    <details class="ind-block">
+      <summary class="top-header zone-header-yellow">
+        <span class="ind-num">12</span>
+        <span class="ind-name">Инвестиции</span>
+        <span class="ind-place"><span class="place-lbl">место</span><span class="place-num">22</span></span>
+        <span class="ind-weight">10%</span>
+        <span class="ind-zone-badge zone-badge-yellow">Жёлтая</span>
+      </summary>
+      
+        <table class="leaf-table">
+          <thead><tr><th>Код</th><th>Наименование</th><th>Вес</th><th>Место</th><th>Зона</th><th>Ответственный</th></tr></thead>
+          <tbody><tr class="row-yellow"><td class="mono">12.1</td><td>Привлечение новых налоговых резидентов</td><td class="num">5.00%</td><td class="num"><b>27</b></td><td class="zone-cell zone-yellow">Жёлтая</td><td>К.О. Типографщик</td></tr><tr class="row-green"><td class="mono">12.2</td><td>Инвестиционные проекты</td><td class="num">3.00%</td><td class="num"><b>15</b></td><td class="zone-cell zone-green">Зелёная</td><td>К.О. Типографщик</td></tr><tr class="row-yellow"><td class="mono">12.3</td><td>Размещение объектов на инвестпортале</td><td class="num">2.00%</td><td class="num"><b>17</b></td><td class="zone-cell zone-yellow">Жёлтая</td><td>К.О. Типографщик</td></tr></tbody>
+        </table>
+    </details>
+    
+
+    <details class="ind-block">
+      <summary class="top-header zone-header-red">
+        <span class="ind-num">13</span>
+        <span class="ind-name">Финансы: ресурсы для развития и инноваций</span>
+        <span class="ind-place"><span class="place-lbl">место</span><span class="place-num">47</span></span>
+        <span class="ind-weight">12%</span>
+        <span class="ind-zone-badge zone-badge-red">Красная</span>
+      </summary>
+      
+        <table class="leaf-table">
+          <thead><tr><th>Код</th><th>Наименование</th><th>Вес</th><th>Место</th><th>Зона</th><th>Ответственный</th></tr></thead>
+          <tbody><tr class="row-green"><td class="mono">13.1</td><td>Централизованная бухгалтерия/кадры</td><td class="num">3.60%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td><td>Н.А. Назарьева</td></tr><tr class="row-green"><td class="mono">13.2</td><td>Ускорение процессов</td><td class="num">1.20%</td><td class="num"><b>15</b></td><td class="zone-cell zone-green">Зелёная</td><td>Н.А. Назарьева</td></tr><tr class="row-red"><td class="mono">13.3</td><td>Приоритетные направления за счёт дотаций</td><td class="num">3.60%</td><td class="num"><b>51</b></td><td class="zone-cell zone-red">Красная</td><td>Н.А. Назарьева</td></tr><tr class="row-green"><td class="mono">13.4.1</td><td>Доходный потенциал бюджета</td><td class="num">0.72%</td><td class="num"><b>11</b></td><td class="zone-cell zone-green">Зелёная</td><td>Н.А. Назарьева</td></tr><tr class="row-red"><td class="mono">13.4.2</td><td>Снижение задолж. по имущ. налогам</td><td class="num">0.72%</td><td class="num"><b>43</b></td><td class="zone-cell zone-red">Красная</td><td>Н.А. Назарьева</td></tr><tr class="row-green"><td class="mono">13.4.3</td><td>Просроченная кредиторская задолженность</td><td class="num">0.36%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td><td>Н.А. Назарьева</td></tr><tr class="row-yellow"><td class="mono">13.4.4</td><td>Эффективность управления муниц. долгом</td><td class="num">1.80%</td><td class="num"><b>38</b></td><td class="zone-cell zone-yellow">Жёлтая</td><td>Н.А. Назарьева</td></tr></tbody>
+        </table>
+    </details>
+    
+
+    <details class="ind-block">
+      <summary class="top-header zone-header-red">
+        <span class="ind-num">14</span>
+        <span class="ind-name">Эффективное использование имущ. ресурсов</span>
+        <span class="ind-place"><span class="place-lbl">место</span><span class="place-num">42</span></span>
+        <span class="ind-weight">3%</span>
+        <span class="ind-zone-badge zone-badge-red">Красная</span>
+      </summary>
+      
+        <table class="leaf-table">
+          <thead><tr><th>Код</th><th>Наименование</th><th>Вес</th><th>Место</th><th>Зона</th><th>Ответственный</th></tr></thead>
+          <tbody><tr class="row-green"><td class="mono">14.1</td><td>Финэффект от нецелевого использования</td><td class="num">0.60%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td><td>О.А. Мошарова</td></tr><tr class="row-red"><td class="mono">14.2</td><td>Доходы бюджета от земли/имущества</td><td class="num">0.60%</td><td class="num"><b>49</b></td><td class="zone-cell zone-red">Красная</td><td>О.А. Мошарова</td></tr><tr class="row-green"><td class="mono">14.3</td><td>Вовлечение недвижимости и ЗУ</td><td class="num">0.30%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td><td>О.А. Мошарова</td></tr><tr class="row-green"><td class="mono">14.4</td><td>Вовлечение регионального имущества</td><td class="num">0.30%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td><td>О.А. Мошарова</td></tr><tr class="row-green"><td class="mono">14.5</td><td>Недвижимость в налоговый оборот</td><td class="num">0.75%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td><td>О.А. Мошарова</td></tr><tr class="row-yellow"><td class="mono">14.6</td><td>Полномочия по земле</td><td class="num">0.45%</td><td class="num"><b>40</b></td><td class="zone-cell zone-yellow">Жёлтая</td><td>О.А. Мошарова</td></tr></tbody>
+        </table>
+    </details>
+    
+  </div>
+
+  <!-- ====== TAB 2 ====== -->
+  <div class="panel" id="deputies">
+
+    <h2>Раскрытие по заместителям</h2>
+    <p class="subtitle">Все подпоказатели по каждому заму с местом и зоной.</p>
+    
+    <details class="deputy-detail">
+      <summary>
+        <span class="dep-fio-line"><b>Э.А. Машковцев</b> <span class="dep-role-inline">— Информполитика</span></span>
+      </summary>
+      <div class="deputy-body">
+        <table class="leaf-table">
+          <thead><tr><th>Код</th><th>Наименование</th><th>Вес</th><th>Место</th><th>Зона</th></tr></thead>
+          <tbody><tr class="row-yellow"><td class="mono">1.1.1</td><td>Доверие В.В. Путину</td><td class="num">1.250%</td><td class="num"><b>22</b></td><td class="zone-cell zone-yellow">Жёлтая</td></tr><tr class="row-yellow"><td class="mono">1.1.2</td><td>Доверие А.Ю. Воробьёву</td><td class="num">1.250%</td><td class="num"><b>40</b></td><td class="zone-cell zone-yellow">Жёлтая</td></tr><tr class="row-green"><td class="mono">3.1</td><td>Инфоугрозы</td><td class="num">2.000%</td><td class="num"><b>7</b></td><td class="zone-cell zone-green">Зелёная</td></tr><tr class="row-green"><td class="mono">3.2</td><td>Выездные администрации</td><td class="num">1.000%</td><td class="num"><b>19</b></td><td class="zone-cell zone-green">Зелёная</td></tr></tbody>
+        </table>
+      </div>
+    </details>
+    
+
+    <details class="deputy-detail">
+      <summary>
+        <span class="dep-fio-line"><b>И.В. Тишина</b> <span class="dep-role-inline">— Образование, культура, спорт</span></span>
+      </summary>
+      <div class="deputy-body">
+        <table class="leaf-table">
+          <thead><tr><th>Код</th><th>Наименование</th><th>Вес</th><th>Место</th><th>Зона</th></tr></thead>
+          <tbody><tr class="row-green"><td class="mono">1.2.1</td><td>Здравоохранение (баланс оценок)</td><td class="num">1.250%</td><td class="num"><b>13</b></td><td class="zone-cell zone-green">Зелёная</td></tr><tr class="row-yellow"><td class="mono">1.2.2</td><td>Образование (баланс оценок)</td><td class="num">1.250%</td><td class="num"><b>29</b></td><td class="zone-cell zone-yellow">Жёлтая</td></tr><tr class="row-green"><td class="mono">3.5</td><td>Школьная лига</td><td class="num">1.000%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td></tr><tr class="row-green"><td class="mono">11.1</td><td>Умный ДК</td><td class="num">2.000%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td></tr><tr class="row-green"><td class="mono">11.2</td><td>Умный ФОК</td><td class="num">2.000%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td></tr></tbody>
+        </table>
+      </div>
+    </details>
+    
+
+    <details class="deputy-detail">
+      <summary>
+        <span class="dep-fio-line"><b>В.В. Тушинов</b> <span class="dep-role-inline">— Дороги, благоустройство</span></span>
+      </summary>
+      <div class="deputy-body">
+        <table class="leaf-table">
+          <thead><tr><th>Код</th><th>Наименование</th><th>Вес</th><th>Место</th><th>Зона</th></tr></thead>
+          <tbody><tr class="row-yellow"><td class="mono">1.2.5</td><td>Транспорт (баланс оценок)</td><td class="num">1.250%</td><td class="num"><b>34</b></td><td class="zone-cell zone-yellow">Жёлтая</td></tr><tr class="row-red"><td class="mono">1.2.6</td><td>Качество дорог (баланс оценок)</td><td class="num">1.250%</td><td class="num"><b>43</b></td><td class="zone-cell zone-red">Красная</td></tr><tr class="row-red"><td class="mono">1.2.7</td><td>Благоустройство (баланс оценок)</td><td class="num">1.250%</td><td class="num"><b>49</b></td><td class="zone-cell zone-red">Красная</td></tr><tr class="row-green"><td class="mono">4.1.1</td><td>СКПДИ, чат-бот ТКО/ДИП</td><td class="num">0.429%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td></tr><tr class="row-green"><td class="mono">4.1.2</td><td>Дворники МБУ в Яндекс.Вектор</td><td class="num">0.429%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td></tr><tr class="row-green"><td class="mono">4.1.3</td><td>Бюджет на содержание территорий</td><td class="num">0.429%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td></tr><tr class="row-green"><td class="mono">4.1.4</td><td>1С:Фреш</td><td class="num">0.429%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td></tr><tr class="row-green"><td class="mono">4.1.5</td><td>Контрактная служба МБУ</td><td class="num">0.429%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td></tr><tr class="row-green"><td class="mono">4.1.6</td><td>Обеспеченность МБУ кадрами</td><td class="num">0.429%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td></tr><tr class="row-green"><td class="mono">4.1.7</td><td>Качество работы ОМСУ в чат-боте ТКО</td><td class="num">0.214%</td><td class="num"><b>12</b></td><td class="zone-cell zone-green">Зелёная</td></tr><tr class="row-green"><td class="mono">7.2</td><td>Снос расселённого жилья</td><td class="num">1.250%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td></tr><tr class="row-green"><td class="mono">8.1</td><td>Единое платное парковочное пространство</td><td class="num">1.000%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td></tr><tr class="row-red"><td class="mono">8.2</td><td>Снижение смертности на дорогах/ж/д</td><td class="num">4.000%</td><td class="num"><b>46</b></td><td class="zone-cell zone-red">Красная</td></tr></tbody>
+        </table>
+      </div>
+    </details>
+    
+
+    <details class="deputy-detail">
+      <summary>
+        <span class="dep-fio-line"><b>О.А. Мошарова</b> <span class="dep-role-inline">— Имущество, земля</span></span>
+      </summary>
+      <div class="deputy-body">
+        <table class="leaf-table">
+          <thead><tr><th>Код</th><th>Наименование</th><th>Вес</th><th>Место</th><th>Зона</th></tr></thead>
+          <tbody><tr class="row-green"><td class="mono">7.1</td><td>Расселение частично расселённых МКД</td><td class="num">1.250%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td></tr><tr class="row-green"><td class="mono">7.3</td><td>Вовлечение высвободившихся ЗУ</td><td class="num">1.250%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td></tr><tr class="row-green"><td class="mono">7.4</td><td>Перевод МКД в блокир. застройку</td><td class="num">1.250%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td></tr><tr class="row-green"><td class="mono">14.1</td><td>Финэффект от нецелевого использования</td><td class="num">0.600%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td></tr><tr class="row-red"><td class="mono">14.2</td><td>Доходы бюджета от земли/имущества</td><td class="num">0.600%</td><td class="num"><b>49</b></td><td class="zone-cell zone-red">Красная</td></tr><tr class="row-green"><td class="mono">14.3</td><td>Вовлечение недвижимости и ЗУ</td><td class="num">0.300%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td></tr><tr class="row-green"><td class="mono">14.4</td><td>Вовлечение регионального имущества</td><td class="num">0.300%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td></tr><tr class="row-green"><td class="mono">14.5</td><td>Недвижимость в налоговый оборот</td><td class="num">0.750%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td></tr><tr class="row-yellow"><td class="mono">14.6</td><td>Полномочия по земле</td><td class="num">0.450%</td><td class="num"><b>40</b></td><td class="zone-cell zone-yellow">Жёлтая</td></tr></tbody>
+        </table>
+      </div>
+    </details>
+    
+
+    <details class="deputy-detail">
+      <summary>
+        <span class="dep-fio-line"><b>К.О. Типографщик</b> <span class="dep-role-inline">— Инвестиции, потребрынок</span></span>
+      </summary>
+      <div class="deputy-body">
+        <table class="leaf-table">
+          <thead><tr><th>Код</th><th>Наименование</th><th>Вес</th><th>Место</th><th>Зона</th></tr></thead>
+          <tbody><tr class="row-yellow"><td class="mono">3.4</td><td>Единый стандарт зон воинских захоронений</td><td class="num">1.000%</td><td class="num"><b>22</b></td><td class="zone-cell zone-yellow">Жёлтая</td></tr><tr class="row-red"><td class="mono">9.1</td><td>Ремонт капитальных объектов потребрынка</td><td class="num">1.500%</td><td class="num"><b>45</b></td><td class="zone-cell zone-red">Красная</td></tr><tr class="row-green"><td class="mono">9.2</td><td>Демонтаж НТО</td><td class="num">3.500%</td><td class="num"><b>9</b></td><td class="zone-cell zone-green">Зелёная</td></tr><tr class="row-yellow"><td class="mono">12.1</td><td>Привлечение новых налоговых резидентов</td><td class="num">5.000%</td><td class="num"><b>27</b></td><td class="zone-cell zone-yellow">Жёлтая</td></tr><tr class="row-green"><td class="mono">12.2</td><td>Инвестиционные проекты</td><td class="num">3.000%</td><td class="num"><b>15</b></td><td class="zone-cell zone-green">Зелёная</td></tr><tr class="row-yellow"><td class="mono">12.3</td><td>Размещение объектов на инвестпортале</td><td class="num">2.000%</td><td class="num"><b>17</b></td><td class="zone-cell zone-yellow">Жёлтая</td></tr></tbody>
+        </table>
+      </div>
+    </details>
+    
+
+    <details class="deputy-detail">
+      <summary>
+        <span class="dep-fio-line"><b>М.С. Барков</b> <span class="dep-role-inline">— Безопасность, госзадачи</span></span>
+      </summary>
+      <div class="deputy-body">
+        <table class="leaf-table">
+          <thead><tr><th>Код</th><th>Наименование</th><th>Вес</th><th>Место</th><th>Зона</th></tr></thead>
+          <tbody><tr class="row-green"><td class="mono">2</td><td>Реализация государственных задач</td><td class="num">4.000%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td></tr><tr class="row-red"><td class="mono">3.3.1</td><td>Безопасный регион: видеонаблюдение</td><td class="num">0.750%</td><td class="num"><b>50</b></td><td class="zone-cell zone-red">Красная</td></tr><tr class="row-red"><td class="mono">3.3.2</td><td>Безопасный регион: нарушения по камерам</td><td class="num">0.250%</td><td class="num"><b>48</b></td><td class="zone-cell zone-red">Красная</td></tr></tbody>
+        </table>
+      </div>
+    </details>
+    
+
+    <details class="deputy-detail">
+      <summary>
+        <span class="dep-fio-line"><b>Н.А. Назарьева</b> <span class="dep-role-inline">— Финансы</span></span>
+      </summary>
+      <div class="deputy-body">
+        <table class="leaf-table">
+          <thead><tr><th>Код</th><th>Наименование</th><th>Вес</th><th>Место</th><th>Зона</th></tr></thead>
+          <tbody><tr class="row-green"><td class="mono">13.1</td><td>Централизованная бухгалтерия/кадры</td><td class="num">3.600%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td></tr><tr class="row-green"><td class="mono">13.2</td><td>Ускорение процессов</td><td class="num">1.200%</td><td class="num"><b>15</b></td><td class="zone-cell zone-green">Зелёная</td></tr><tr class="row-red"><td class="mono">13.3</td><td>Приоритетные направления за счёт дотаций</td><td class="num">3.600%</td><td class="num"><b>51</b></td><td class="zone-cell zone-red">Красная</td></tr><tr class="row-green"><td class="mono">13.4.1</td><td>Доходный потенциал бюджета</td><td class="num">0.720%</td><td class="num"><b>11</b></td><td class="zone-cell zone-green">Зелёная</td></tr><tr class="row-red"><td class="mono">13.4.2</td><td>Снижение задолж. по имущ. налогам</td><td class="num">0.720%</td><td class="num"><b>43</b></td><td class="zone-cell zone-red">Красная</td></tr><tr class="row-green"><td class="mono">13.4.3</td><td>Просроченная кредиторская задолженность</td><td class="num">0.360%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td></tr><tr class="row-yellow"><td class="mono">13.4.4</td><td>Эффективность управления муниц. долгом</td><td class="num">1.800%</td><td class="num"><b>38</b></td><td class="zone-cell zone-yellow">Жёлтая</td></tr></tbody>
+        </table>
+      </div>
+    </details>
+    
+
+    <details class="deputy-detail">
+      <summary>
+        <span class="dep-fio-line"><b>Н.С. Иванов</b> <span class="dep-role-inline">— ЖКХ</span></span>
+      </summary>
+      <div class="deputy-body">
+        <table class="leaf-table">
+          <thead><tr><th>Код</th><th>Наименование</th><th>Вес</th><th>Место</th><th>Зона</th></tr></thead>
+          <tbody><tr class="row-red"><td class="mono">1.2.3</td><td>Экология (баланс оценок)</td><td class="num">1.250%</td><td class="num"><b>44</b></td><td class="zone-cell zone-red">Красная</td></tr><tr class="row-green"><td class="mono">1.2.4</td><td>ЖКХ (баланс оценок)</td><td class="num">1.250%</td><td class="num"><b>18</b></td><td class="zone-cell zone-green">Зелёная</td></tr><tr class="row-green"><td class="mono">4.1.7</td><td>Качество работы ОМСУ в чат-боте ТКО</td><td class="num">0.214%</td><td class="num"><b>12</b></td><td class="zone-cell zone-green">Зелёная</td></tr><tr class="row-red"><td class="mono">4.2</td><td>Собираемость начислений ЖКУ</td><td class="num">2.000%</td><td class="num"><b>44</b></td><td class="zone-cell zone-red">Красная</td></tr><tr class="row-yellow"><td class="mono">4.3</td><td>Оснащение МКД ОДПУ</td><td class="num">2.000%</td><td class="num"><b>36</b></td><td class="zone-cell zone-yellow">Жёлтая</td></tr><tr class="row-red"><td class="mono">4.4</td><td>Работа с сообщениями в ЕДС</td><td class="num">2.000%</td><td class="num"><b>49</b></td><td class="zone-cell zone-red">Красная</td></tr><tr class="row-red"><td class="mono">4.5</td><td>Доступ для ТО газового оборудования</td><td class="num">1.000%</td><td class="num"><b>43</b></td><td class="zone-cell zone-red">Красная</td></tr><tr class="row-red"><td class="mono">6.1</td><td>Модернизация ЖКХ (инвест/госпрограмма)</td><td class="num">2.333%</td><td class="num"><b>39</b></td><td class="zone-cell zone-red">Красная</td></tr><tr class="row-green"><td class="mono">6.2</td><td>Паспорт готовности к отоп. периоду</td><td class="num">2.333%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td></tr><tr class="row-green"><td class="mono">6.3</td><td>Цифровая диспетчеризация 2.0</td><td class="num">2.333%</td><td class="num"><b>1</b></td><td class="zone-cell zone-green">Зелёная</td></tr></tbody>
+        </table>
+      </div>
+    </details>
+    
+
+    <h2>Рейтинг заместителей</h2>
+    <p class="subtitle">Общий вклад — суммарный вес подпоказателей зама в рейтинге. Рейтинг зама — оставшаяся часть после заморозки за красные (1:1) и жёлтые (1:5) показатели. Показатель 1 «Доверие» в расчёт не входит.</p>
+    <div class="dep-grid">
+    <div class="dep-card card-accent-green">
+      <div class="dep-header">
+        <div>
+          <div class="dep-name">Э.А. Машковцев</div>
+          <div class="dep-role">Информполитика</div>
+        </div>
+        <span class="dep-symbol">⭐</span>
+      </div>
+      <div class="dep-metrics">
+        <div class="dep-metric">
+          <div class="dep-metric-value">3.00%</div>
+          <div class="dep-metric-label">Общий вклад</div>
+        </div>
+        <div class="dep-metric">
+          <div class="dep-metric-value" style="color:var(--green)">100.0%</div>
+          <div class="dep-metric-label">Рейтинг зама</div>
+        </div>
+      </div>
+      <div class="dep-zonebar">
+        <div class="zbar-seg zbar-green" style="width:100.00%"></div>
+        <div class="zbar-seg zbar-yellow" style="width:0.00%"></div>
+        <div class="zbar-seg zbar-red" style="width:0.00%"></div>
+      </div>
+      <div class="dep-zonelabels">
+        <span><span class="lgnd-dot" style="background:var(--green)"></span>Зел. 100%</span>
+        <span><span class="lgnd-dot" style="background:var(--yellow)"></span>Жёлт. 0%</span>
+        <span><span class="lgnd-dot" style="background:var(--red)"></span>Кр. 0%</span>
+      </div>
+      <div class="dep-status">Отлично</div>
+    </div>
+    
+
+    <div class="dep-card card-accent-green">
+      <div class="dep-header">
+        <div>
+          <div class="dep-name">И.В. Тишина</div>
+          <div class="dep-role">Образование, культура, спорт</div>
+        </div>
+        <span class="dep-symbol">⭐</span>
+      </div>
+      <div class="dep-metrics">
+        <div class="dep-metric">
+          <div class="dep-metric-value">5.00%</div>
+          <div class="dep-metric-label">Общий вклад</div>
+        </div>
+        <div class="dep-metric">
+          <div class="dep-metric-value" style="color:var(--green)">100.0%</div>
+          <div class="dep-metric-label">Рейтинг зама</div>
+        </div>
+      </div>
+      <div class="dep-zonebar">
+        <div class="zbar-seg zbar-green" style="width:100.00%"></div>
+        <div class="zbar-seg zbar-yellow" style="width:0.00%"></div>
+        <div class="zbar-seg zbar-red" style="width:0.00%"></div>
+      </div>
+      <div class="dep-zonelabels">
+        <span><span class="lgnd-dot" style="background:var(--green)"></span>Зел. 100%</span>
+        <span><span class="lgnd-dot" style="background:var(--yellow)"></span>Жёлт. 0%</span>
+        <span><span class="lgnd-dot" style="background:var(--red)"></span>Кр. 0%</span>
+      </div>
+      <div class="dep-status">Отлично</div>
+    </div>
+    
+
+    <div class="dep-card card-accent-green">
+      <div class="dep-header">
+        <div>
+          <div class="dep-name">В.В. Тушинов</div>
+          <div class="dep-role">Дороги, благоустройство</div>
+        </div>
+        
+      </div>
+      <div class="dep-metrics">
+        <div class="dep-metric">
+          <div class="dep-metric-value">9.04%</div>
+          <div class="dep-metric-label">Общий вклад</div>
+        </div>
+        <div class="dep-metric">
+          <div class="dep-metric-value" style="color:var(--green)">91.1%</div>
+          <div class="dep-metric-label">Рейтинг зама</div>
+        </div>
+      </div>
+      <div class="dep-zonebar">
+        <div class="zbar-seg zbar-green" style="width:55.70%"></div>
+        <div class="zbar-seg zbar-yellow" style="width:44.30%"></div>
+        <div class="zbar-seg zbar-red" style="width:0.00%"></div>
+      </div>
+      <div class="dep-zonelabels">
+        <span><span class="lgnd-dot" style="background:var(--green)"></span>Зел. 56%</span>
+        <span><span class="lgnd-dot" style="background:var(--yellow)"></span>Жёлт. 44%</span>
+        <span><span class="lgnd-dot" style="background:var(--red)"></span>Кр. 0%</span>
+      </div>
+      <div class="dep-status">Норма</div>
+    </div>
+    
+
+    <div class="dep-card card-accent-yellow">
+      <div class="dep-header">
+        <div>
+          <div class="dep-name">О.А. Мошарова</div>
+          <div class="dep-role">Имущество, земля</div>
+        </div>
+        <span class="dep-symbol">👎</span>
+      </div>
+      <div class="dep-metrics">
+        <div class="dep-metric">
+          <div class="dep-metric-value">6.75%</div>
+          <div class="dep-metric-label">Общий вклад</div>
+        </div>
+        <div class="dep-metric">
+          <div class="dep-metric-value" style="color:var(--yellow)">89.8%</div>
+          <div class="dep-metric-label">Рейтинг зама</div>
+        </div>
+      </div>
+      <div class="dep-zonebar">
+        <div class="zbar-seg zbar-green" style="width:84.40%"></div>
+        <div class="zbar-seg zbar-yellow" style="width:6.70%"></div>
+        <div class="zbar-seg zbar-red" style="width:8.90%"></div>
+      </div>
+      <div class="dep-zonelabels">
+        <span><span class="lgnd-dot" style="background:var(--green)"></span>Зел. 84%</span>
+        <span><span class="lgnd-dot" style="background:var(--yellow)"></span>Жёлт. 7%</span>
+        <span><span class="lgnd-dot" style="background:var(--red)"></span>Кр. 9%</span>
+      </div>
+      <div class="dep-status">Внимание</div>
+    </div>
+    
+
+    <div class="dep-card card-accent-yellow">
+      <div class="dep-header">
+        <div>
+          <div class="dep-name">К.О. Типографщик</div>
+          <div class="dep-role">Инвестиции, потребрынок</div>
+        </div>
+        <span class="dep-symbol">👎</span>
+      </div>
+      <div class="dep-metrics">
+        <div class="dep-metric">
+          <div class="dep-metric-value">16.00%</div>
+          <div class="dep-metric-label">Общий вклад</div>
+        </div>
+        <div class="dep-metric">
+          <div class="dep-metric-value" style="color:var(--yellow)">80.6%</div>
+          <div class="dep-metric-label">Рейтинг зама</div>
+        </div>
+      </div>
+      <div class="dep-zonebar">
+        <div class="zbar-seg zbar-green" style="width:40.60%"></div>
+        <div class="zbar-seg zbar-yellow" style="width:50.00%"></div>
+        <div class="zbar-seg zbar-red" style="width:9.40%"></div>
+      </div>
+      <div class="dep-zonelabels">
+        <span><span class="lgnd-dot" style="background:var(--green)"></span>Зел. 41%</span>
+        <span><span class="lgnd-dot" style="background:var(--yellow)"></span>Жёлт. 50%</span>
+        <span><span class="lgnd-dot" style="background:var(--red)"></span>Кр. 9%</span>
+      </div>
+      <div class="dep-status">Внимание</div>
+    </div>
+    
+
+    <div class="dep-card card-accent-yellow">
+      <div class="dep-header">
+        <div>
+          <div class="dep-name">М.С. Барков</div>
+          <div class="dep-role">Безопасность, госзадачи</div>
+        </div>
+        <span class="dep-symbol">👎</span>
+      </div>
+      <div class="dep-metrics">
+        <div class="dep-metric">
+          <div class="dep-metric-value">5.00%</div>
+          <div class="dep-metric-label">Общий вклад</div>
+        </div>
+        <div class="dep-metric">
+          <div class="dep-metric-value" style="color:var(--yellow)">80.0%</div>
+          <div class="dep-metric-label">Рейтинг зама</div>
+        </div>
+      </div>
+      <div class="dep-zonebar">
+        <div class="zbar-seg zbar-green" style="width:80.00%"></div>
+        <div class="zbar-seg zbar-yellow" style="width:0.00%"></div>
+        <div class="zbar-seg zbar-red" style="width:20.00%"></div>
+      </div>
+      <div class="dep-zonelabels">
+        <span><span class="lgnd-dot" style="background:var(--green)"></span>Зел. 80%</span>
+        <span><span class="lgnd-dot" style="background:var(--yellow)"></span>Жёлт. 0%</span>
+        <span><span class="lgnd-dot" style="background:var(--red)"></span>Кр. 20%</span>
+      </div>
+      <div class="dep-status">Внимание</div>
+    </div>
+    
+
+    <div class="dep-card card-accent-red">
+      <div class="dep-header">
+        <div>
+          <div class="dep-name">Н.А. Назарьева</div>
+          <div class="dep-role">Финансы</div>
+        </div>
+        <span class="dep-symbol">👎👎</span>
+      </div>
+      <div class="dep-metrics">
+        <div class="dep-metric">
+          <div class="dep-metric-value">12.00%</div>
+          <div class="dep-metric-label">Общий вклад</div>
+        </div>
+        <div class="dep-metric">
+          <div class="dep-metric-value" style="color:var(--red)">61.0%</div>
+          <div class="dep-metric-label">Рейтинг зама</div>
+        </div>
+      </div>
+      <div class="dep-zonebar">
+        <div class="zbar-seg zbar-green" style="width:49.00%"></div>
+        <div class="zbar-seg zbar-yellow" style="width:15.00%"></div>
+        <div class="zbar-seg zbar-red" style="width:36.00%"></div>
+      </div>
+      <div class="dep-zonelabels">
+        <span><span class="lgnd-dot" style="background:var(--green)"></span>Зел. 49%</span>
+        <span><span class="lgnd-dot" style="background:var(--yellow)"></span>Жёлт. 15%</span>
+        <span><span class="lgnd-dot" style="background:var(--red)"></span>Кр. 36%</span>
+      </div>
+      <div class="dep-status">Проблема</div>
+    </div>
+    
+
+    <div class="dep-card card-accent-red">
+      <div class="dep-header">
+        <div>
+          <div class="dep-name">Н.С. Иванов</div>
+          <div class="dep-role">ЖКХ</div>
+        </div>
+        <span class="dep-symbol">👎👎👎</span>
+      </div>
+      <div class="dep-metrics">
+        <div class="dep-metric">
+          <div class="dep-metric-value">14.21%</div>
+          <div class="dep-metric-label">Общий вклад</div>
+        </div>
+        <div class="dep-metric">
+          <div class="dep-metric-value" style="color:var(--red)">45.6%</div>
+          <div class="dep-metric-label">Рейтинг зама</div>
+        </div>
+      </div>
+      <div class="dep-zonebar">
+        <div class="zbar-seg zbar-green" style="width:34.30%"></div>
+        <div class="zbar-seg zbar-yellow" style="width:14.10%"></div>
+        <div class="zbar-seg zbar-red" style="width:51.60%"></div>
+      </div>
+      <div class="dep-zonelabels">
+        <span><span class="lgnd-dot" style="background:var(--green)"></span>Зел. 34%</span>
+        <span><span class="lgnd-dot" style="background:var(--yellow)"></span>Жёлт. 14%</span>
+        <span><span class="lgnd-dot" style="background:var(--red)"></span>Кр. 52%</span>
+      </div>
+      <div class="dep-status">Критично</div>
+    </div>
+    </div>
+
+    <div class="method">
+      <h3>Легенда символов</h3>
+      <ul>
+        <li>⭐ — 100%: полностью зелёный портфель</li>
+        <li>без знака — 90–99%: норма</li>
+        <li>👎 — 80–89%: внимание</li>
+        <li>👎👎 — 60–79%: проблема</li>
+        <li>👎👎👎 — ниже 60%: критично</li>
+      </ul>
+    </div>
+    <div class="method">
+      <h3>Формула</h3>
+      <div class="formula">Заморозка = (Σ красных весов × 100% + Σ жёлтых весов × 20%) ÷ общий вес зама × 100%</div>
+      <div class="formula">Рейтинг зама = 100% − Заморозка</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+document.querySelectorAll(".tab").forEach(t=>{
+  t.addEventListener("click",()=>{
+    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+    document.querySelectorAll(".panel").forEach(x=>x.classList.remove("active"));
+    t.classList.add("active");
+    document.getElementById(t.dataset.tab).classList.add("active");
+  });
+});
+</script>
+</body>
+</html>
